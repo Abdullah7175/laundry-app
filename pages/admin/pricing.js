@@ -40,82 +40,76 @@ export default function AdminPricing() {
 
   const fetchPricingItems = async () => {
     setIsLoading(true);
-    try {
-      const response = await fetch('/api/pricing');
-      if (response.ok) {
-        const data = await response.json();
-        setPricingItems(data);
-      } else {
-        throw new Error('Failed to fetch pricing items');
+    
+    // Using mock data for now instead of actual API calls
+    console.log('Using mock pricing data');
+    
+    // Set mock pricing data
+    setPricingItems([
+      {
+        id: 1,
+        name: 'Bed Sheets',
+        nameAr: 'ملاءات السرير',
+        price: 25,
+        description: 'Deep cleaning for all your bed sheets',
+        descriptionAr: 'تنظيف عميق لجميع ملاءات السرير',
+        icon: '🛏️',
+        isActive: true
+      },
+      {
+        id: 2,
+        name: 'Pillowcases',
+        nameAr: 'أكياس الوسائد',
+        price: 10,
+        description: 'Fresh and clean pillowcases',
+        descriptionAr: 'أكياس وسائد منعشة ونظيفة',
+        icon: '🛌',
+        isActive: true
+      },
+      {
+        id: 3,
+        name: 'Duvet Covers',
+        nameAr: 'أغطية اللحاف',
+        price: 35,
+        description: 'Professional cleaning for duvet covers',
+        descriptionAr: 'تنظيف احترافي لأغطية اللحاف',
+        icon: '🧵',
+        isActive: true
+      },
+      {
+        id: 4,
+        name: 'Blankets',
+        nameAr: 'البطانيات',
+        price: 45,
+        description: 'Thorough cleaning for all blankets',
+        descriptionAr: 'تنظيف شامل لجميع البطانيات',
+        icon: '🧶',
+        isActive: true
+      },
+      {
+        id: 5,
+        name: 'Comforters',
+        nameAr: 'اللحف',
+        price: 60,
+        description: 'Deep cleaning for comforters',
+        descriptionAr: 'تنظيف عميق للحف',
+        icon: '🧠',
+        isActive: true
+      },
+      {
+        id: 6,
+        name: 'Quilts',
+        nameAr: 'الألحفة',
+        price: 55,
+        description: 'Professional cleaning for quilts',
+        descriptionAr: 'تنظيف احترافي للألحفة',
+        icon: '🧩',
+        isActive: true
       }
-    } catch (error) {
-      console.error('Error fetching pricing items:', error);
-      // For now, use some default items if API fails
-      setPricingItems([
-        {
-          id: 1,
-          name: 'Bed Sheets',
-          nameAr: 'ملاءات السرير',
-          price: 25,
-          description: 'Deep cleaning for all your bed sheets',
-          descriptionAr: 'تنظيف عميق لجميع ملاءات السرير',
-          icon: '🛏️',
-          isActive: true
-        },
-        {
-          id: 2,
-          name: 'Pillowcases',
-          nameAr: 'أكياس الوسائد',
-          price: 10,
-          description: 'Fresh and clean pillowcases',
-          descriptionAr: 'أكياس وسائد منعشة ونظيفة',
-          icon: '🛌',
-          isActive: true
-        },
-        {
-          id: 3,
-          name: 'Duvet Covers',
-          nameAr: 'أغطية اللحاف',
-          price: 35,
-          description: 'Professional cleaning for duvet covers',
-          descriptionAr: 'تنظيف احترافي لأغطية اللحاف',
-          icon: '🧵',
-          isActive: true
-        },
-        {
-          id: 4,
-          name: 'Blankets',
-          nameAr: 'البطانيات',
-          price: 45,
-          description: 'Thorough cleaning for all blankets',
-          descriptionAr: 'تنظيف شامل لجميع البطانيات',
-          icon: '🧶',
-          isActive: true
-        },
-        {
-          id: 5,
-          name: 'Comforters',
-          nameAr: 'اللحف',
-          price: 60,
-          description: 'Deep cleaning for comforters',
-          descriptionAr: 'تنظيف عميق للحف',
-          icon: '🧠',
-          isActive: true
-        },
-        {
-          id: 6,
-          name: 'Quilts',
-          nameAr: 'الألحفة',
-          price: 55,
-          description: 'Professional cleaning for quilts',
-          descriptionAr: 'تنظيف احترافي للألحفة',
-          icon: '🧩',
-          isActive: true
-        }
-      ]);
-    } finally {
-      setIsLoading(false);
-    }
+    ]);
+    
+    // Finish loading
+    setIsLoading(false);
   };
 
   const handleEditItem = (item) => {
@@ -159,62 +153,32 @@ export default function AdminPricing() {
     setMessage({ type: '', text: '' });
     
     try {
-      let response;
+      // In the future, we'll implement real API calls
+      // let response;
       
-      if (editingItem) {
-        // Update existing item
-        response = await fetch(`/api/pricing/${editingItem.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(itemForm)
-        });
-      } else {
-        // Create new item
-        response = await fetch('/api/pricing', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(itemForm)
-        });
-      }
+      // if (editingItem) {
+      //   // Update existing item
+      //   response = await fetch(`/api/pricing/${editingItem.id}`, {
+      //     method: 'PUT',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify(itemForm)
+      //   });
+      // } else {
+      //   // Create new item
+      //   response = await fetch('/api/pricing', {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify(itemForm)
+      //   });
+      // }
       
-      if (response.ok) {
-        const updatedOrNewItem = await response.json();
-        
-        if (editingItem) {
-          // Update item in the state
-          setPricingItems(pricingItems.map(item => 
-            item.id === editingItem.id ? updatedOrNewItem : item
-          ));
-          setMessage({ 
-            type: 'success', 
-            text: language === 'en' 
-              ? `Successfully updated ${itemForm.name}` 
-              : `تم تحديث ${itemForm.nameAr} بنجاح`
-          });
-        } else {
-          // Add new item to the state
-          setPricingItems([...pricingItems, updatedOrNewItem]);
-          setMessage({ 
-            type: 'success', 
-            text: language === 'en' 
-              ? `Successfully added ${itemForm.name}` 
-              : `تمت إضافة ${itemForm.nameAr} بنجاح`
-          });
-        }
-        
-        // Reset form and editing state
-        setIsEditing(false);
-      } else {
-        throw new Error('Failed to save item');
-      }
-    } catch (error) {
-      console.error('Error saving item:', error);
+      // Simulating API response for demo
+      console.log('Using mock data for item submission');
       
-      // Simulate API response for demo
       if (editingItem) {
         // Update the mock data
         const updatedItems = pricingItems.map(item => 
@@ -242,33 +206,61 @@ export default function AdminPricing() {
         });
       }
       
+      // Reset form and editing state
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error saving item:', error);
+      
+      // Show error message but continue with mock data
+      setMessage({ 
+        type: 'error', 
+        text: language === 'en' 
+          ? 'An error occurred, but changes were saved locally.' 
+          : 'حدث خطأ، ولكن تم حفظ التغييرات محليًا.'
+      });
+      
+      // Even if real API would fail, we'll still update our local state for the demo
+      if (editingItem) {
+        const updatedItems = pricingItems.map(item => 
+          item.id === editingItem.id ? { ...item, ...itemForm } : item
+        );
+        setPricingItems(updatedItems);
+      } else {
+        const newItem = {
+          id: pricingItems.length + 1,
+          ...itemForm
+        };
+        setPricingItems([...pricingItems, newItem]);
+      }
+      
       setIsEditing(false);
     }
   };
 
   const handleToggleStatus = async (item) => {
     try {
-      const updatedItem = { ...item, isActive: !item.isActive };
+      // In the future, we'll implement API call
+      // const updatedItem = { ...item, isActive: !item.isActive };
+      // 
+      // const response = await fetch(`/api/pricing/${item.id}`, {
+      //   method: 'PUT',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(updatedItem)
+      // });
       
-      const response = await fetch(`/api/pricing/${item.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedItem)
-      });
+      // Simulating API response for demo
+      console.log('Using mock data for toggle status');
       
-      if (response.ok) {
-        setPricingItems(pricingItems.map(i => 
-          i.id === item.id ? updatedItem : i
-        ));
-      } else {
-        throw new Error('Failed to update status');
-      }
+      // Update mock data
+      setPricingItems(pricingItems.map(i => 
+        i.id === item.id ? { ...i, isActive: !i.isActive } : i
+      ));
     } catch (error) {
       console.error('Error updating status:', error);
       
-      // Simulate API response for demo
+      // Even if API would fail, we update the UI for the demo
       setPricingItems(pricingItems.map(i => 
         i.id === item.id ? { ...i, isActive: !i.isActive } : i
       ));
@@ -281,25 +273,15 @@ export default function AdminPricing() {
       : `هل أنت متأكد أنك تريد حذف ${item.nameAr}؟`)) {
       
       try {
-        const response = await fetch(`/api/pricing/${item.id}`, {
-          method: 'DELETE'
-        });
+        // In the future, we'll implement API call
+        // const response = await fetch(`/api/pricing/${item.id}`, {
+        //   method: 'DELETE'
+        // });
         
-        if (response.ok) {
-          setPricingItems(pricingItems.filter(i => i.id !== item.id));
-          setMessage({ 
-            type: 'success', 
-            text: language === 'en' 
-              ? `Successfully deleted ${item.name}` 
-              : `تم حذف ${item.nameAr} بنجاح`
-          });
-        } else {
-          throw new Error('Failed to delete item');
-        }
-      } catch (error) {
-        console.error('Error deleting item:', error);
+        // Simulating API response for demo
+        console.log('Using mock data for delete item');
         
-        // Simulate API response for demo
+        // Update mock data
         setPricingItems(pricingItems.filter(i => i.id !== item.id));
         setMessage({ 
           type: 'success', 
@@ -307,6 +289,19 @@ export default function AdminPricing() {
             ? `Successfully deleted ${item.name}` 
             : `تم حذف ${item.nameAr} بنجاح`
         });
+      } catch (error) {
+        console.error('Error deleting item:', error);
+        
+        // Show error but still update UI for demo
+        setMessage({ 
+          type: 'error', 
+          text: language === 'en' 
+            ? `Error occurred but ${item.name} was removed locally.` 
+            : `حدث خطأ ولكن تمت إزالة ${item.nameAr} محليًا.`
+        });
+        
+        // For demo, we'll still remove it from the UI
+        setPricingItems(pricingItems.filter(i => i.id !== item.id));
       }
     }
   };

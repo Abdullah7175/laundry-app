@@ -41,17 +41,12 @@ export default function AdminAreas() {
 
   const fetchServiceAreas = async () => {
     setIsLoading(true);
+    
     try {
-      const response = await fetch('/api/areas');
-      if (response.ok) {
-        const data = await response.json();
-        setServiceAreas(data);
-      } else {
-        throw new Error('Failed to fetch service areas');
-      }
-    } catch (error) {
-      console.error('Error fetching service areas:', error);
-      // For now, use some default areas if API fails
+      // Using mock data for now instead of actual API calls
+      console.log('Using mock service areas data');
+      
+      // Set mock service areas data
       setServiceAreas([
         {
           id: 1,
@@ -109,6 +104,8 @@ export default function AdminAreas() {
           estimatedDeliveryTime: 36
         }
       ]);
+    } catch (error) {
+      console.error('Error with mock service areas:', error);
     } finally {
       setIsLoading(false);
     }
@@ -157,62 +154,32 @@ export default function AdminAreas() {
     setMessage({ type: '', text: '' });
     
     try {
-      let response;
+      // In the future, we'll implement real API calls
+      // let response;
       
-      if (editingArea) {
-        // Update existing area
-        response = await fetch(`/api/areas/${editingArea.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(areaForm)
-        });
-      } else {
-        // Create new area
-        response = await fetch('/api/areas', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(areaForm)
-        });
-      }
+      // if (editingArea) {
+      //   // Update existing area
+      //   response = await fetch(`/api/areas/${editingArea.id}`, {
+      //     method: 'PUT',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify(areaForm)
+      //   });
+      // } else {
+      //   // Create new area
+      //   response = await fetch('/api/areas', {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify(areaForm)
+      //   });
+      // }
       
-      if (response.ok) {
-        const updatedOrNewArea = await response.json();
-        
-        if (editingArea) {
-          // Update area in the state
-          setServiceAreas(serviceAreas.map(area => 
-            area.id === editingArea.id ? updatedOrNewArea : area
-          ));
-          setMessage({ 
-            type: 'success', 
-            text: language === 'en' 
-              ? `Successfully updated ${areaForm.name}` 
-              : `تم تحديث ${areaForm.nameAr} بنجاح`
-          });
-        } else {
-          // Add new area to the state
-          setServiceAreas([...serviceAreas, updatedOrNewArea]);
-          setMessage({ 
-            type: 'success', 
-            text: language === 'en' 
-              ? `Successfully added ${areaForm.name}` 
-              : `تمت إضافة ${areaForm.nameAr} بنجاح`
-          });
-        }
-        
-        // Reset form and editing state
-        setIsEditing(false);
-      } else {
-        throw new Error('Failed to save area');
-      }
-    } catch (error) {
-      console.error('Error saving area:', error);
+      // Simulating API response for demo
+      console.log('Using mock data for area submission');
       
-      // Simulate API response for demo
       if (editingArea) {
         // Update the mock data
         const updatedAreas = serviceAreas.map(area => 
@@ -240,33 +207,61 @@ export default function AdminAreas() {
         });
       }
       
+      // Reset form and editing state
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error saving area:', error);
+      
+      // Show error message but continue with mock data
+      setMessage({ 
+        type: 'error', 
+        text: language === 'en' 
+          ? 'An error occurred, but changes were saved locally.' 
+          : 'حدث خطأ، ولكن تم حفظ التغييرات محليًا.'
+      });
+      
+      // Even if real API would fail, we'll still update our local state for the demo
+      if (editingArea) {
+        const updatedAreas = serviceAreas.map(area => 
+          area.id === editingArea.id ? { ...area, ...areaForm } : area
+        );
+        setServiceAreas(updatedAreas);
+      } else {
+        const newArea = {
+          id: serviceAreas.length + 1,
+          ...areaForm
+        };
+        setServiceAreas([...serviceAreas, newArea]);
+      }
+      
       setIsEditing(false);
     }
   };
 
   const handleToggleStatus = async (area) => {
     try {
-      const updatedArea = { ...area, isActive: !area.isActive };
+      // In the future, we'll implement API call
+      // const updatedArea = { ...area, isActive: !area.isActive };
+      // 
+      // const response = await fetch(`/api/areas/${area.id}`, {
+      //   method: 'PUT',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(updatedArea)
+      // });
       
-      const response = await fetch(`/api/areas/${area.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedArea)
-      });
+      // Simulating API response for demo
+      console.log('Using mock data for toggle status');
       
-      if (response.ok) {
-        setServiceAreas(serviceAreas.map(a => 
-          a.id === area.id ? updatedArea : a
-        ));
-      } else {
-        throw new Error('Failed to update status');
-      }
+      // Update mock data
+      setServiceAreas(serviceAreas.map(a => 
+        a.id === area.id ? { ...a, isActive: !a.isActive } : a
+      ));
     } catch (error) {
       console.error('Error updating status:', error);
       
-      // Simulate API response for demo
+      // Even if API would fail, we update the UI for the demo
       setServiceAreas(serviceAreas.map(a => 
         a.id === area.id ? { ...a, isActive: !a.isActive } : a
       ));
@@ -279,25 +274,15 @@ export default function AdminAreas() {
       : `هل أنت متأكد أنك تريد حذف ${area.nameAr}؟`)) {
       
       try {
-        const response = await fetch(`/api/areas/${area.id}`, {
-          method: 'DELETE'
-        });
+        // In the future, we'll implement API call
+        // const response = await fetch(`/api/areas/${area.id}`, {
+        //   method: 'DELETE'
+        // });
         
-        if (response.ok) {
-          setServiceAreas(serviceAreas.filter(a => a.id !== area.id));
-          setMessage({ 
-            type: 'success', 
-            text: language === 'en' 
-              ? `Successfully deleted ${area.name}` 
-              : `تم حذف ${area.nameAr} بنجاح`
-          });
-        } else {
-          throw new Error('Failed to delete area');
-        }
-      } catch (error) {
-        console.error('Error deleting area:', error);
+        // Simulating API response for demo
+        console.log('Using mock data for delete area');
         
-        // Simulate API response for demo
+        // Update mock data
         setServiceAreas(serviceAreas.filter(a => a.id !== area.id));
         setMessage({ 
           type: 'success', 
@@ -305,6 +290,19 @@ export default function AdminAreas() {
             ? `Successfully deleted ${area.name}` 
             : `تم حذف ${area.nameAr} بنجاح`
         });
+      } catch (error) {
+        console.error('Error deleting area:', error);
+        
+        // Show error but still update UI for demo
+        setMessage({ 
+          type: 'error', 
+          text: language === 'en' 
+            ? `Error occurred but ${area.name} was removed locally.` 
+            : `حدث خطأ ولكن تمت إزالة ${area.nameAr} محليًا.`
+        });
+        
+        // For demo, we'll still remove it from the UI
+        setServiceAreas(serviceAreas.filter(a => a.id !== area.id));
       }
     }
   };
