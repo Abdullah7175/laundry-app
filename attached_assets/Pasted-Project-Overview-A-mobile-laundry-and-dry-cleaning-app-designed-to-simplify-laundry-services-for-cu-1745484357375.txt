@@ -1,0 +1,87 @@
+Project Overview
+A mobile laundry and dry-cleaning app designed to simplify laundry services for customers across Saudi
+Arabia. Initially serving your own laundry business, the app offers seamless booking, pickup, delivery,
+and payment—all through a user-friendly interface. Once established, it will scale as a white-label or
+SaaS solution for other laundry shops, helping them increase sales and customer retention through
+digital transformation.
+Target Users:
+• Busy professionals
+• Families
+• Students
+• Expats
+• Small businesses (uniforms, linens)
+
+User Journey:
+
+Sign Up / Log In
+
+Add Location (Auto Detect or Manual)
+
+Select Services
+o Wash & Fold
+o Iron Only
+o Dry Cleaning
+o Special Garments (Abayas, suits, carpets)
+
+Pick-up Time Slot
+
+Delivery Time Slot
+
+Payment (Cash, Card, Apple Pay, STC Pay)
+
+Track Order Status
+
+Rate the Service
+
+Features (Phase 1 – For Your Own Business)
+For Customers:
+• Account registration/login (with OTP)
+• Pickup & delivery scheduling
+• Real-time order tracking
+• Service selection and price calculator
+
+Push notifications & SMS alerts
+• Coupons and referral programs
+• In-app support chat / FAQs
+• Loyalty points system
+For Admin (Your Side):
+• Order management dashboard
+• Fleet management (drivers and routes)
+• Customer database & CRM
+• Revenue reports and sales analytics
+• Notifications and customer engagement tools
+• Price management by category
+• Service area management
+
+Features (Phase 2 – For Other Laundry Shops)
+• White-label or subscription model
+• Multi-vendor management system
+• Custom branding for each laundry
+• Role-based access (Owner, Staff, Delivery)
+• Commission tracking per vendor
+• Integration with POS and local ERPs
+• Mobile app for laundry partners
+• Analytics dashboard for partners
+• Review and rating management
+
+Design Approach:
+• Clean, minimal UI with pastel/blue tones
+• Arabic + English support
+• One-tap booking flow
+• Map-based pickup tracking
+• Visual icons for laundry categories
+• Payment gateway integration
+
+i dnt want this app for cloths i want this app for only these
+Cleaning Services Of: 
+o Bed sheets
+o Pillowcases
+o Duvet covers
+o Blankets
+o Comforters
+o Quilt
+
+
+i need complete panel for delivery boy, vendors, customers and admin
+also laundry service panel
+PLEASE create complete panels with all features and demo logins
