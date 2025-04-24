@@ -116,7 +116,7 @@ export default function Login() {
   };
   
   return (
-    <Layout title={language === 'en' ? 'Login | Bedding Laundry' : 'تسجيل الدخول | غسيل المفارش'}>
+    <Layout title={language === 'en' ? 'Login | NASI CLEANING' : 'تسجيل الدخول | تنظيف الأرز'}>
       <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
         <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
           <div>

@@ -56,7 +56,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="max-w-xl mx-auto text-center">
             <h1 className="text-4xl font-bold mb-4">
-              {language === 'en' ? 'Professional Bedding Laundry Service' : 'خدمة غسيل مفارش السرير الاحترافية'}
+              {language === 'en' ? 'NASI CLEANING Service' : 'خدمة غسيل مفارش السرير الاحترافية'}
             </h1>
             <p className="text-xl mb-8">
               {language === 'en' 

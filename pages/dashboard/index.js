@@ -64,7 +64,7 @@ export default function CustomerDashboard() {
   
   if (loading || !user) {
     return (
-      <Layout title={language === 'en' ? 'Loading... | Bedding Laundry' : 'جاري التحميل... | غسيل المفارش'}>
+      <Layout title={language === 'en' ? 'Loading... | NASI CLEANING' : 'جاري التحميل... |تنظيف الأرز'}>
         <div className="flex items-center justify-center min-h-screen">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
         </div>
@@ -73,7 +73,7 @@ export default function CustomerDashboard() {
   }
   
   return (
-    <Layout title={language === 'en' ? 'Dashboard | Bedding Laundry' : 'لوحة التحكم | غسيل المفارش'}>
+    <Layout title={language === 'en' ? 'Dashboard | NASI CLEANING' : 'لوحة التحكم | تنظيف الأرز'}>
       <div className="bg-gray-50 min-h-screen pb-12">
         <div className="bg-primary-700 text-white pt-8 pb-24">
           <div className="container mx-auto px-4">

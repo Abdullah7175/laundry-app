@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-export default function Layout({ children, title = 'Bedding Laundry Service' }) {
+export default function Layout({ children, title = 'NASI CLEANING Service' }) {
   const router = useRouter();
   const [language, setLanguage] = useState('en');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -26,7 +26,7 @@ export default function Layout({ children, title = 'Bedding Laundry Service' }) 
     <div className={`${language === 'ar' ? 'rtl' : ''} min-h-screen flex flex-col`}>
       <Head>
         <title>{title}</title>
-        <meta name="description" content="Bedding laundry and dry cleaning service for all your bedding needs" />
+        <meta name="description" content="NASI CLEANING and service for all your bedding needs" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -36,7 +36,7 @@ export default function Layout({ children, title = 'Bedding Laundry Service' }) 
           <div className="flex items-center">
             <button onClick={() => router.push('/')} className="flex items-center space-x-2">
               <span className="text-2xl md:text-3xl font-bold">
-                {language === 'en' ? 'Bedding Laundry' : 'غسيل المفارش'}
+                {language === 'en' ? 'NASI CLEANING' : 'تنظيف الأرز'}
               </span>
             </button>
           </div>
@@ -160,7 +160,7 @@ export default function Layout({ children, title = 'Bedding Laundry Service' }) 
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-xl font-bold mb-4">{language === 'en' ? 'Bedding Laundry' : 'غسيل المفارش'}</h3>
+              <h3 className="text-xl font-bold mb-4">{language === 'en' ? 'NASI CLEANING' : 'تنظيف الأرز'}</h3>
               <p className="text-gray-300 mb-4">
                 {language === 'en' 
                   ? 'Professional laundry service for all your bedding needs.' 
@@ -276,7 +276,7 @@ export default function Layout({ children, title = 'Bedding Laundry Service' }) 
           
           <div className="mt-12 pt-8 border-t border-gray-700 text-center text-gray-400">
             <p>
-              &copy; {new Date().getFullYear()} {language === 'en' ? 'Bedding Laundry. All rights reserved.' : 'غسيل المفارش. جميع الحقوق محفوظة.'}
+              &copy; {new Date().getFullYear()} {language === 'en' ? 'NASI CLEANING. All rights reserved.' : 'تنظيف الأرز. جميع الحقوق محفوظة.'}
             </p>
           </div>
         </div>
