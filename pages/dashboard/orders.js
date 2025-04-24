@@ -326,7 +326,6 @@ export default function CustomerOrders() {
                       </div>
                     </div>
                   </div>
-                  
                   {showMap && (
                     <div className="mb-6">
                       <h3 className="font-medium text-blue-800 mb-2">
