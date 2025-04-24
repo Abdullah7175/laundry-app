@@ -17,24 +17,30 @@ export default function ServiceCard({ service, language }) {
   
   return (
     <div 
-      className={`bg-white rounded-lg shadow-md p-6 transition-all duration-300 ${
+      className={`bg-white rounded-2xl shadow-md p-6 transition-all duration-300 border border-gray-100 hover:border-primary-200 ${
         isHovered ? 'transform -translate-y-2 shadow-lg' : ''
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
     >
-      <div className="text-4xl mb-4">{service.icon}</div>
-      <h3 className="text-xl font-bold text-blue-700 mb-2">
+      <div className="flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-primary-100 text-primary-600">
+        <span className="text-3xl">{service.icon}</span>
+      </div>
+      
+      <h3 className="text-xl font-bold text-gray-800 mb-3">
         {language === 'en' ? service.title : service.titleAr || service.title}
       </h3>
-      <p className="text-gray-600 mb-4">
+      
+      <p className="text-gray-600 mb-6 leading-relaxed">
         {language === 'en' ? service.description : service.descriptionAr || service.description}
       </p>
-      <div className="flex justify-between items-center">
-        <span className="text-lg font-bold text-blue-600">{service.price} SAR</span>
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full transition duration-300">
-          {language === 'en' ? 'Book Now' : 'احجز الآن'}
+      
+      <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+        <span className="text-xl font-bold text-primary-700">{service.price} SAR</span>
+        
+        <button className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-primary-600 px-4 py-2 text-white shadow-md transition duration-300 ease-out hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2">
+          <span className="relative">{language === 'en' ? 'Book Now' : 'احجز الآن'}</span>
         </button>
       </div>
     </div>
