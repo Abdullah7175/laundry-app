@@ -4,7 +4,7 @@ import Layout from '../../components/Layout';
 import Sidebar from '../../components/Sidebar';
 import { useAuth } from '../../context/AuthContext';
 import { useOrder } from '../../context/OrderContext';
-// import Map from '../../components/Map';
+import Map from '../../components/Map';
 
 export default function AdminOrders() {
   const [language, setLanguage] = useState('en');
@@ -552,10 +552,10 @@ export default function AdminOrders() {
                             }
                           </h3>
                           <div className="h-64 bg-gray-100 rounded-md overflow-hidden">
-                            {/* <Map 
+                            <Map 
                               order={selectedOrder} 
                               language={language}
-                            /> */}
+                            />
                           </div>
                         </div>
                       )}
