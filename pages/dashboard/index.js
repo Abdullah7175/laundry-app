@@ -4,6 +4,7 @@ import Layout from '../../components/Layout';
 import Sidebar from '../../components/Sidebar';
 import BookingForm from '../../components/BookingForm';
 import OrderCard from '../../components/OrderCard';
+import VendorCard, { dummyVendors } from '../../components/VendorCard';
 import { useAuth } from '../../context/AuthContext';
 import { useOrder } from '../../context/OrderContext';
 
@@ -15,6 +16,10 @@ export default function CustomerDashboard() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [language, setLanguage] = useState('en');
   const [recentOrders, setRecentOrders] = useState([]);
+  // const [vendors, setVendors] = useState([]); // New state for vendors
+  const [selectedVendor, setSelectedVendor] = useState(null); // New state for selected vendor
+  const [isLoadingVendors, setIsLoadingVendors] = useState(false); // Loading state
+  const [vendors, setVendors] = useState(dummyVendors);
   
   useEffect(() => {
     // Check for language preference in localStorage
@@ -42,22 +47,43 @@ export default function CustomerDashboard() {
     }
   }, [isAuthenticated, loading, router, user, getCustomerOrders]);
   
+  // Load vendors when book tab is active
+  useEffect(() => {
+    if (activeTab === 'book' && !vendors.length) {
+      loadVendors();
+    }
+  }, [activeTab]);
+  
+  // Function to load vendors
+  const loadVendors = async () => {
+    setIsLoadingVendors(true);
+    try {
+      // Replace with your actual API call
+      const response = await fetch('/api/vendors');
+      const data = await response.json();
+      setVendors(data);
+    } catch (err) {
+      console.error('Error loading vendors:', err);
+    } finally {
+      setIsLoadingVendors(false);
+    }
+  };
+  
   // Update recent orders when orders change
   useEffect(() => {
     if (orders && orders.length > 0) {
-      // Sort by created date (most recent first) and take the first 3
       const sorted = [...orders].sort((a, b) => 
         new Date(b.createdAt) - new Date(a.createdAt)
       ).slice(0, 3);
-      
       setRecentOrders(sorted);
     }
   }, [orders]);
   
-  // Navigation items
+  // Navigation items - add vendors tab
   const navItems = [
     { id: 'dashboard', label: language === 'en' ? 'Dashboard' : 'لوحة التحكم', icon: '📊' },
-    { id: 'book', label: language === 'en' ? 'Book Service' : 'حجز الخدمة', icon: '📝' },
+    // { id: 'book', label: language === 'en' ? 'Book Service' : 'حجز الخدمة', icon: '📝' },
+    { id: 'vendors', label: language === 'en' ? 'Our Vendors' : 'البائعون لدينا', icon: '🏢' }, // New tab
     { id: 'orders', label: language === 'en' ? 'My Orders' : 'طلباتي', icon: '📦' },
     { id: 'profile', label: language === 'en' ? 'Profile' : 'الملف الشخصي', icon: '👤' }
   ];
@@ -71,6 +97,7 @@ export default function CustomerDashboard() {
       </Layout>
     );
   }
+  
   
   return (
     <Layout title={language === 'en' ? 'Dashboard | NASI CLEANING' : 'لوحة التحكم | تنظيف الأرز'}>
@@ -274,6 +301,52 @@ export default function CustomerDashboard() {
                     {language === 'en' ? 'Book a Service' : 'حجز خدمة'}
                   </h2>
                   <BookingForm language={language} />
+                </div>
+              )}
+
+              {/* Vendors tab */}
+              {activeTab === 'vendors' && (
+                <div>
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-2xl font-bold text-gray-800">
+                      {language === 'en' ? 'Our Trusted Vendors' : 'بائعون موثوقون لدينا'}
+                    </h2>
+                    <button 
+                      onClick={() => setActiveTab('book')}
+                      className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
+                    >
+                      {language === 'en' ? 'Book a Service' : 'حجز خدمة'}
+                    </button>
+                  </div>
+                  
+                  {isLoadingVendors ? (
+                    <div className="flex justify-center py-8">
+                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-600"></div>
+                    </div>
+                  ) : vendors.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                     {vendors.map(vendor => (
+                        <VendorCard 
+                          key={vendor.id}
+                          vendor={vendor}
+                          onSelect={(selectedVendor) => setSelectedVendor(selectedVendor)}
+                          language={language}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 bg-white rounded-xl shadow-sm">
+                      <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                      </svg>
+                      <p className="text-gray-500">
+                        {language === 'en' 
+                          ? 'No vendors available at the moment.' 
+                          : 'لا توجد بائعين متاحين في الوقت الحالي.'
+                        }
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
               

@@ -4,14 +4,16 @@ import Layout from '../../components/Layout';
 import Sidebar from '../../components/Sidebar';
 import { useAuth } from '../../context/AuthContext';
 import { useOrder } from '../../context/OrderContext';
+import VendorDeliveryManagement from '../../components/vendor/VendorDeliveryManagement';
 
 export default function VendorDashboard() {
   const [language, setLanguage] = useState('en');
   const [activeTab, setActiveTab] = useState('dashboard');
   const router = useRouter();
-  const { user, isAuthenticated, loading } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const { getVendorOrders } = useOrder();
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     totalOrders: 0,
     pendingOrders: 0,
@@ -23,28 +25,16 @@ export default function VendorDashboard() {
     monthlyRevenue: 0
   });
 
-  useEffect(() => {
-    if (!loading && !isAuthenticated) {
-      router.push('/login');
-    }
-
-    if (isAuthenticated && user && user.type !== 'vendor') {
-      // Redirect to the appropriate dashboard based on user type
-      router.push(`/${user.type}`);
-    }
-
-    if (isAuthenticated && user && user.type === 'vendor') {
-      fetchOrders();
-    }
-  }, [loading, isAuthenticated, user, router]);
-
+  // Define fetchOrders before it's used in useEffect
   const fetchOrders = async () => {
     try {
       const fetchedOrders = await getVendorOrders(user.id);
       setOrders(fetchedOrders);
       calculateStats(fetchedOrders);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching orders:', error);
+      setLoading(false);
     }
   };
 
@@ -56,11 +46,16 @@ export default function VendorDashboard() {
     const oneMonthAgo = new Date(today);
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-    const pendingOrders = orderData.filter(order => ['pending', 'confirmed', 'pickup', 'processing', 'readyForDelivery', 'delivery'].includes(order.status)).length;
+    const pendingOrders = orderData.filter(order => 
+      ['pending', 'confirmed', 'pickup', 'processing', 'readyForDelivery', 'delivery'].includes(order.status)
+    ).length;
+    
     const completedOrders = orderData.filter(order => order.status === 'delivered').length;
     const cancelledOrders = orderData.filter(order => order.status === 'cancelled').length;
     
-    const totalRevenue = orderData.filter(order => order.status === 'delivered').reduce((sum, order) => sum + order.total, 0);
+    const totalRevenue = orderData
+      .filter(order => order.status === 'delivered')
+      .reduce((sum, order) => sum + order.total, 0);
     
     const dailyRevenue = orderData
       .filter(order => order.status === 'delivered' && new Date(order.createdAt) >= today)
@@ -86,6 +81,20 @@ export default function VendorDashboard() {
     });
   };
 
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      router.push('/login');
+    }
+
+    if (isAuthenticated && user && user.type !== 'vendor') {
+      router.push(`/${user.type}`);
+    }
+
+    if (isAuthenticated && user && user.type === 'vendor') {
+      fetchOrders();
+    }
+  }, [loading, isAuthenticated, user, router]);
+
   if (loading) {
     return (
       <Layout>
@@ -110,6 +119,11 @@ export default function VendorDashboard() {
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 5);
 
+  // Get orders ready for delivery management
+  const deliveryOrders = orders.filter(order => 
+    ['readyForDelivery', 'delivery'].includes(order.status)
+  );
+  
   return (
     <Layout>
       <div className="flex flex-col md:flex-row min-h-screen bg-blue-50">
@@ -372,6 +386,11 @@ export default function VendorDashboard() {
               </div>
             </div>
           </div>
+           {/* Vendor Delivery Management */}
+           <VendorDeliveryManagement 
+            language={language} 
+            orders={orders.filter(order => ['readyForDelivery', 'delivery'].includes(order.status))}
+          />
         </div>
       </div>
     </Layout>

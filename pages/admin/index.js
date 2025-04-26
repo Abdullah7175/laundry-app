@@ -4,6 +4,7 @@ import Layout from '../../components/Layout';
 import Sidebar from '../../components/Sidebar';
 import { useAuth } from '../../context/AuthContext';
 import { useOrder } from '../../context/OrderContext';
+import { useDelivery } from '../../context/DeliveryContext';
 
 export default function AdminDashboard() {
   const [language, setLanguage] = useState('en');
@@ -22,6 +23,24 @@ export default function AdminDashboard() {
     monthlyRevenue: 0,
     customers: 0
   });
+  const { 
+    riders = [], 
+    availableRiders = [], 
+    assignedDeliveries = [], 
+    unassignedDeliveries = [], 
+    loadRiders = () => {} 
+  } = useDelivery();
+
+  useEffect(() => {
+    if (isAuthenticated && user && user.type === 'admin') {
+      try {
+        loadRiders();
+        getAllOrders();
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    }
+  }, [isAuthenticated, user]);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -95,6 +114,7 @@ export default function AdminDashboard() {
   const navItems = [
     { id: 'dashboard', label: language === 'en' ? 'Dashboard' : 'لوحة القيادة', icon: '📊' },
     { id: 'orders', label: language === 'en' ? 'Orders' : 'الطلبات', icon: '📦' },
+    { id: 'assign-rider', label: language === 'en' ? 'Riders' : 'الدراجين', icon: '🏍️' },
     { id: 'customers', label: language === 'en' ? 'Customers' : 'العملاء', icon: '👥' },
     { id: 'analytics', label: language === 'en' ? 'Analytics' : 'التحليلات', icon: '📈' },
     { id: 'pricing', label: language === 'en' ? 'Pricing' : 'التسعير', icon: '💰' },
@@ -111,6 +131,137 @@ export default function AdminDashboard() {
   const recentOrders = orders
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 5);
+
+    // const DeliveryManagementSection = () => (
+    //   <div className="bg-white rounded-lg shadow-md p-4 mt-8">
+    //     <h2 className="text-lg font-bold text-blue-800 mb-4">
+    //       {language === 'en' ? 'Delivery Management' : 'إدارة التوصيل'}
+    //     </h2>
+        
+    //     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    //       {/* Available Riders */}
+    //       <div className="bg-blue-50 p-4 rounded-lg">
+    //         <h3 className="font-medium text-gray-800 mb-3">
+    //           {language === 'en' ? 'Available Riders' : 'الراكبون المتاحون'}
+    //         </h3>
+    //         {availableRiders.length > 0 ? (
+    //           <ul className="space-y-2">
+    //             {availableRiders.map(rider => (
+    //               <li key={rider.id} className="flex justify-between items-center p-2 bg-white rounded-md">
+    //                 <span>{rider.name}</span>
+    //                 <span className="text-sm text-gray-500">{rider.vehicle}</span>
+    //               </li>
+    //             ))}
+    //           </ul>
+    //         ) : (
+    //           <p className="text-gray-500">
+    //             {language === 'en' ? 'No available riders' : 'لا يوجد راكبون متاحون'}
+    //           </p>
+    //         )}
+    //       </div>
+          
+    //       {/* Unassigned Deliveries */}
+    //       <div className="bg-yellow-50 p-4 rounded-lg">
+    //         <h3 className="font-medium text-gray-800 mb-3">
+    //           {language === 'en' ? 'Ready for Delivery' : 'جاهز للتسليم'}
+    //         </h3>
+    //         {unassignedDeliveries.length > 0 ? (
+    //           <ul className="space-y-2">
+    //             {unassignedDeliveries.map(order => (
+    //               <li key={order.id} className="flex justify-between items-center p-2 bg-white rounded-md">
+    //                 <span>Order #{order.id}</span>
+    //                 <button 
+    //                   onClick={() => router.push(`/admin/assign-rider?orderId=${order.id}`)}
+    //                   className="text-sm text-blue-600 hover:text-blue-800"
+    //                 >
+    //                   {language === 'en' ? 'Assign Rider' : 'تعيين راكب'}
+    //                 </button>
+    //               </li>
+    //             ))}
+    //           </ul>
+    //         ) : (
+    //           <p className="text-gray-500">
+    //             {language === 'en' ? 'No unassigned deliveries' : 'لا توجد توصيلات غير معينة'}
+    //           </p>
+    //         )}
+    //       </div>
+    //     </div>
+    //   </div>
+    // );
+    
+
+    const DeliveryManagementSection = () => {
+      const { availableRiders, unassignedDeliveries, assignRider } = useDelivery();
+
+      return (
+        <div className="bg-white rounded-lg shadow-md p-4 mt-8">
+          <h2 className="text-lg font-bold text-blue-800 mb-4">
+            {language === 'en' ? 'Delivery Management' : 'إدارة التوصيل'}
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Available Riders */}
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h3 className="font-medium text-gray-800 mb-3">
+                {language === 'en' ? 'Available Riders' : 'الراكبون المتاحون'}
+              </h3>
+              {availableRiders.length > 0 ? (
+                <ul className="space-y-2">
+                  {availableRiders.map(rider => (
+                    <li key={rider.id} className="flex justify-between items-center p-2 bg-white rounded-md">
+                      <span>{rider.name}</span>
+                      <span className="text-sm text-gray-500">
+                        {rider.vehicle === 'motorcycle' ? 'Motorcycle' : 
+                         rider.vehicle === 'bicycle' ? 'Bicycle' : 'Car'}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-500">
+                  {language === 'en' ? 'No available riders' : 'لا يوجد راكبون متاحون'}
+                </p>
+              )}
+            </div>
+            
+            {/* Unassigned Deliveries */}
+            <div className="bg-yellow-50 p-4 rounded-lg">
+              <h3 className="font-medium text-gray-800 mb-3">
+                {language === 'en' ? 'Ready for Delivery' : 'جاهز للتسليم'}
+              </h3>
+              {unassignedDeliveries.length > 0 ? (
+                <ul className="space-y-2">
+                  {unassignedDeliveries.map(order => (
+                    <li key={order.id} className="flex justify-between items-center p-2 bg-white rounded-md">
+                      <span>Order #{order.id}</span>
+                      <select
+                        onChange={(e) => assignRider(order.id, e.target.value)}
+                        className="border rounded p-1 text-sm"
+                        defaultValue=""
+                      >
+                        <option value="" disabled>
+                          {language === 'en' ? 'Assign Rider' : 'تعيين راكب'}
+                        </option>
+                        {availableRiders.map(rider => (
+                          <option key={rider.id} value={rider.id}>
+                            {rider.name} ({rider.vehicle})
+                          </option>
+                        ))}
+                      </select>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-500">
+                  {language === 'en' ? 'No unassigned deliveries' : 'لا توجد توصيلات غير معينة'}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    };
+    
 
   return (
     <Layout>
@@ -239,7 +390,7 @@ export default function AdminDashboard() {
               </div>
             </div>
           </div>
-          
+
           {/* Orders and Customers */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             {/* Recent Orders */}
@@ -432,6 +583,7 @@ export default function AdminDashboard() {
               </button>
             </div>
           </div>
+          <DeliveryManagementSection />
         </div>
       </div>
     </Layout>

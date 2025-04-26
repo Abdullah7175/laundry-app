@@ -40,9 +40,9 @@ export default function Login() {
         case 'vendor':
           router.push('/vendor');
           break;
-        case 'delivery':
-          router.push('/delivery');
-          break;
+        // case 'delivery':
+        //   router.push('/delivery');
+        //   break;
         case 'laundry':
           router.push('/laundry');
           break;
@@ -102,11 +102,11 @@ export default function Login() {
         setPassword('vendor123');
         setUserType('vendor');
         break;
-      case 'delivery':
-        setEmail('delivery@example.com');
-        setPassword('delivery123');
-        setUserType('delivery');
-        break;
+      // case 'delivery':
+      //   setEmail('delivery@example.com');
+      //   setPassword('delivery123');
+      //   setUserType('delivery');
+      //   break;
       case 'laundry':
         setEmail('laundry@example.com');
         setPassword('laundry123');
@@ -187,7 +187,7 @@ export default function Login() {
                 <option value="customer">{language === 'en' ? 'Customer' : 'عميل'}</option>
                 <option value="admin">{language === 'en' ? 'Admin' : 'مدير'}</option>
                 <option value="vendor">{language === 'en' ? 'Vendor' : 'بائع'}</option>
-                <option value="delivery">{language === 'en' ? 'Delivery' : 'توصيل'}</option>
+                {/* <option value="delivery">{language === 'en' ? 'Delivery' : 'توصيل'}</option> */}
                 <option value="laundry">{language === 'en' ? 'Laundry' : 'غسيل'}</option>
               </select>
             </div>
@@ -264,13 +264,13 @@ export default function Login() {
               >
                 {language === 'en' ? 'Vendor' : 'بائع'}
               </button>
-              <button
+              {/* <button
                 type="button"
                 onClick={() => setDemoCredentials('delivery')}
                 className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
                 {language === 'en' ? 'Delivery' : 'توصيل'}
-              </button>
+              </button> */}
               <button
                 type="button"
                 onClick={() => setDemoCredentials('laundry')}
