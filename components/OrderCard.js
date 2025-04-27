@@ -154,14 +154,18 @@ export default function OrderCard({ order, language, userType }) {
               
               <div>
                 <h5 className="text-sm font-medium mb-2">{language === 'en' ? 'Items:' : 'العناصر:'}</h5>
-                <ul className="text-sm space-y-2">
+                <div className="mt-2 text-sm text-gray-600">
                   {order.items.map((item, index) => (
-                    <li key={index} className="flex justify-between items-center px-3 py-2 bg-gray-50 rounded-lg">
-                      <span>{item.name} <span className="text-xs font-medium px-1.5 py-0.5 bg-primary-100 text-primary-700 rounded-full">x{item.quantity}</span></span>
-                      <span className="font-medium">{item.price * item.quantity} SAR</span>
-                    </li>
+                    <div key={index} className="flex justify-between px-3 py-2 bg-gray-50 rounded-lg">
+                      <span>
+                        {item.quantity} × {item.name}
+                      </span>
+                      <span className="font-medium">
+                        {item.price * item.quantity} {language === 'en' ? 'SAR' : 'ريال'}
+                      </span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             </div>
           </div>

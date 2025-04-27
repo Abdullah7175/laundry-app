@@ -180,29 +180,68 @@ export function OrderProvider({ children }) {
   };
 
   // Create a new order
-  const createOrder = async (orderData) => {
-    try {
-      // In a real app, you would make an API call here
-      // For demo purposes, create a new order in our mock data
-      const newOrder = {
-        id: mockOrders.length > 0 ? Math.max(...mockOrders.map(o => o.id)) + 1 : 1001,
-        ...orderData,
-        status: 'pending',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        loyaltyPoints: Math.floor(orderData.total / 10)
-      };
+  // const createOrder = async (orderData) => {
+  //   try {
+  //     // In a real app, you would make an API call here
+  //     // For demo purposes, create a new order in our mock data
+  //     const newOrder = {
+  //       id: mockOrders.length > 0 ? Math.max(...mockOrders.map(o => o.id)) + 1 : 1001,
+  //       ...orderData,
+  //       status: 'pending',
+  //       createdAt: new Date().toISOString(),
+  //       updatedAt: new Date().toISOString(),
+  //       loyaltyPoints: Math.floor(orderData.total / 10)
+  //     };
 
-      // Add to mock orders and state
-      mockOrders.push(newOrder);
-      setOrders([...orders, newOrder]);
+  //     // Add to mock orders and state
+  //     mockOrders.push(newOrder);
+  //     setOrders([...orders, newOrder]);
 
-      return newOrder;
-    } catch (error) {
-      console.error('Create order error:', error);
-      throw new Error('Failed to create order');
-    }
-  };
+  //     return newOrder;
+  //   } catch (error) {
+  //     console.error('Create order error:', error);
+  //     throw new Error('Failed to create order');
+  //   }
+  // };
+
+  // Create a new order
+const createOrder = async (orderData) => {
+  try {
+    // Calculate subtotal from items
+    const subtotal = orderData.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    // Create new order object
+    const newOrder = {
+      id: mockOrders.length > 0 ? Math.max(...mockOrders.map(o => o.id)) + 1 : 1001,
+      customerId: orderData.userId,
+      customerName: user?.name || 'Customer',
+      customerPhone: user?.phone || '',
+      vendorId: 3, // Default vendor for laundry
+      address: user?.address || '',
+      items: orderData.items,
+      subtotal: subtotal,
+      deliveryFee: 10, // Fixed delivery fee
+      discount: 0,
+      total: subtotal + 10, // subtotal + delivery fee
+      status: 'pending',
+      paymentMethod: orderData.paymentMethod,
+      pickupTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // Tomorrow
+      deliveryTime: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(), // Day after tomorrow
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      loyaltyPoints: Math.floor((subtotal + 10) / 10) // 1 point per 10 SAR
+    };
+
+    // Add to mock orders and state
+    mockOrders.unshift(newOrder); // Add to beginning
+    setOrders(prevOrders => [newOrder, ...prevOrders]);
+
+    return newOrder;
+  } catch (error) {
+    console.error('Create order error:', error);
+    throw new Error('Failed to create order');
+  }
+};
 
   // Update an order
   const updateOrder = async (orderId, updateData) => {

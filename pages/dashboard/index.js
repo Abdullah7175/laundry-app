@@ -7,12 +7,13 @@ import OrderCard from '../../components/OrderCard';
 import VendorCard, { dummyVendors } from '../../components/VendorCard';
 import { useAuth } from '../../context/AuthContext';
 import { useOrder } from '../../context/OrderContext';
+import LaundryServiceCart from '../../components/LaundryServiceCart';
 
 export default function CustomerDashboard() {
   const router = useRouter();
   const { user, isAuthenticated, loading } = useAuth();
   const { orders, getCustomerOrders } = useOrder();
-  
+  const [showLaundryService, setShowLaundryService] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [language, setLanguage] = useState('en');
   const [recentOrders, setRecentOrders] = useState([]);
@@ -82,6 +83,7 @@ export default function CustomerDashboard() {
   // Navigation items - add vendors tab
   const navItems = [
     { id: 'dashboard', label: language === 'en' ? 'Dashboard' : 'لوحة التحكم', icon: '📊' },
+    { id: 'laundry', label: language === 'en' ? 'Laundry Service' : 'خدمة الغسيل', icon: '🧺' }, 
     // { id: 'book', label: language === 'en' ? 'Book Service' : 'حجز الخدمة', icon: '📝' },
     { id: 'vendors', label: language === 'en' ? 'Our Vendors' : 'البائعون لدينا', icon: '🏢' }, // New tab
     { id: 'orders', label: language === 'en' ? 'My Orders' : 'طلباتي', icon: '📦' },
@@ -389,6 +391,14 @@ export default function CustomerDashboard() {
                   )}
                 </div>
               )}
+              {/* Laundry Service tab */}
+              {activeTab === 'laundry' && (
+                <LaundryServiceCart 
+                  language={language} 
+                  onClose={() => setActiveTab('dashboard')}
+                />
+              )}
+
               
               {/* Profile tab */}
               {activeTab === 'profile' && (
