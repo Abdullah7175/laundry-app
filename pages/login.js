@@ -187,7 +187,7 @@ export default function Login() {
                 <option value="customer">{language === 'en' ? 'Customer' : 'عميل'}</option>
                 <option value="admin">{language === 'en' ? 'Admin' : 'مدير'}</option>
                 <option value="vendor">{language === 'en' ? 'Vendor' : 'بائع'}</option>
-                {/* <option value="delivery">{language === 'en' ? 'Delivery' : 'توصيل'}</option> */}
+                <option value="delivery">{language === 'en' ? 'Delivery' : 'توصيل'}</option>
                 <option value="laundry">{language === 'en' ? 'Laundry' : 'غسيل'}</option>
               </select>
             </div>
