@@ -60,6 +60,14 @@ const AdminLayout = ({ children }) => {
                   {t('admin.orders')}
                 </a>
               </Link>
+              <Link href="/admin/assign-rider">
+                <a className={`${router.pathname === '/admin/assign-rider' ? 'bg-blue-800 text-white' : 'text-white hover:bg-blue-600'} group flex items-center px-2 py-2 text-sm font-medium rounded-md`}>
+                  <svg className="mr-3 h-6 w-6 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                  {t('admin.assign-rider')}
+                </a>
+              </Link>
               <Link href="/admin/customers">
                 <a className={`${router.pathname === '/admin/customers' ? 'bg-blue-800 text-white' : 'text-white hover:bg-blue-600'} group flex items-center px-2 py-2 text-sm font-medium rounded-md`}>
                   <svg className="mr-3 h-6 w-6 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -82,6 +90,22 @@ const AdminLayout = ({ children }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
                   {t('admin.reports')}
+                </a>
+              </Link>
+              <Link href="/admin/users">
+                <a className={`${router.pathname === '/admin/users' ? 'bg-blue-800 text-white' : 'text-white hover:bg-blue-600'} group flex items-center px-2 py-2 text-sm font-medium rounded-md`}>
+                  <svg className="mr-3 h-6 w-6 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                  {t('admin.users')}
+                </a>
+              </Link>
+              <Link href="/admin/vendor">
+                <a className={`${router.pathname === '/admin/vendor' ? 'bg-blue-800 text-white' : 'text-white hover:bg-blue-600'} group flex items-center px-2 py-2 text-sm font-medium rounded-md`}>
+                  <svg className="mr-3 h-6 w-6 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                  {t('admin.vendor')}
                 </a>
               </Link>
               <Link href="/admin/settings">

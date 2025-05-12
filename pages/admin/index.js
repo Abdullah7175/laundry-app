@@ -114,6 +114,8 @@ export default function AdminDashboard() {
   const navItems = [
     { id: 'dashboard', label: language === 'en' ? 'Dashboard' : 'لوحة القيادة', icon: '📊' },
     { id: 'orders', label: language === 'en' ? 'Orders' : 'الطلبات', icon: '📦' },
+    { id: 'users', label: language === 'en' ? 'Users' : 'العملاء', icon: '👥' },
+    { id: 'vendor', label: language === 'en' ? 'Vendor' : 'البائعين', icon: '🏪' },
     { id: 'assign-rider', label: language === 'en' ? 'Riders' : 'الدراجين', icon: '🏍️' },
     { id: 'customers', label: language === 'en' ? 'Customers' : 'العملاء', icon: '👥' },
     { id: 'analytics', label: language === 'en' ? 'Analytics' : 'التحليلات', icon: '📈' },
@@ -144,7 +146,7 @@ export default function AdminDashboard() {
     //         <h3 className="font-medium text-gray-800 mb-3">
     //           {language === 'en' ? 'Available Riders' : 'الراكبون المتاحون'}
     //         </h3>
-    //         {availableRiders.length > 0 ? (
+    //         {available.length > 0 ? (
     //           <ul className="space-y-2">
     //             {availableRiders.map(rider => (
     //               <li key={rider.id} className="flex justify-between items-center p-2 bg-white rounded-md">

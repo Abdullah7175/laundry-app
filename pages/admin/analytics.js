@@ -162,6 +162,9 @@ export default function AdminAnalytics() {
   const navItems = [
     { id: 'dashboard', label: language === 'en' ? 'Dashboard' : 'لوحة القيادة', icon: '📊' },
     { id: 'orders', label: language === 'en' ? 'Orders' : 'الطلبات', icon: '📦' },
+    { id: 'users', label: language === 'en' ? 'Users' : 'العملاء', icon: '👥' },
+    { id: 'vendors', label: language === 'en' ? 'Vendors' : 'البائعين', icon: '🏪' },
+    { id: 'assign-rider', label: language === 'en' ? 'Riders' : 'الدراجين', icon: '🏍️' },
     { id: 'customers', label: language === 'en' ? 'Customers' : 'العملاء', icon: '👥' },
     { id: 'analytics', label: language === 'en' ? 'Analytics' : 'التحليلات', icon: '📈' },
     { id: 'pricing', label: language === 'en' ? 'Pricing' : 'التسعير', icon: '💰' },
