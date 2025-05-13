@@ -7,95 +7,111 @@ export const DeliveryProvider = ({ children }) => {
   const mockRiders = [
     {
       id: '1',
-      name: 'Nasi Rider 1',
+      name: 'Ahmed Ali',
+      email: 'ahmed@example.com',
+      phone: '+966501234567',
       vehicle: 'motorcycle',
       status: 'available',
-      type: 'admin'
+      avatar: '/images/rider1.jpg'
     },
     {
       id: '2',
-      name: 'Vendor A Rider',
-      vehicle: 'bicycle',
+      name: 'Mohammed Hassan',
+      email: 'mohammed@example.com',
+      phone: '+966502345678',
+      vehicle: 'bike',
       status: 'available',
-      type: 'vendor',
-      vendorId: 'vendor1'
+      avatar: '/images/rider2.jpg'
     },
     {
       id: '3',
-      name: 'Vendor B Rider',
+      name: 'Khalid Omar',
+      email: 'khalid@example.com',
+      phone: '+966503456789',
       vehicle: 'car',
       status: 'busy',
-      type: 'vendor',
-      vendorId: 'vendor2'
+      avatar: '/images/rider3.jpg'
+    },
+    {
+      id: '4',
+      name: 'Yousef Ibrahim',
+      email: 'yousef@example.com',
+      phone: '+966504567890',
+      vehicle: 'motorcycle',
+      status: 'available',
+      avatar: '/images/rider4.jpg'
+    },
+    {
+      id: '5',
+      name: 'Fahad Abdullah',
+      email: 'fahad@example.com',
+      phone: '+966505678901',
+      vehicle: 'bike',
+      status: 'busy',
+      avatar: '/images/rider5.jpg'
     }
   ];
 
   const [riders, setRiders] = useState(mockRiders);
   const [availableRiders, setAvailableRiders] = useState([]);
+  const [busyRiders, setBusyRiders] = useState([]);
   const [assignedDeliveries, setAssignedDeliveries] = useState([]);
   const [unassignedDeliveries, setUnassignedDeliveries] = useState([]);
   
-  // Mock order data for deliveries
-  const mockDeliveries = [
-    {
-      id: '101',
-      customerName: 'Customer 1',
-      address: '123 Main St',
-      status: 'readyForDelivery',
-      deliveryPersonId: null,
-      vendorId: 'vendor1'
-    },
-    {
-      id: '102',
-      customerName: 'Customer 2',
-      address: '456 Oak Ave',
-      status: 'delivery',
-      deliveryPersonId: '1',
-      vendorId: null
-    },
-    {
-      id: '103',
-      customerName: 'Customer 3',
-      address: '789 Pine Rd',
-      status: 'readyForDelivery',
-      deliveryPersonId: null,
-      vendorId: 'vendor2'
-    }
-  ];
-
   // Initialize with mock data
   useEffect(() => {
-    setAvailableRiders(riders.filter(rider => rider.status === 'available'));
-    setAssignedDeliveries(mockDeliveries.filter(d => d.deliveryPersonId));
-    setUnassignedDeliveries(mockDeliveries.filter(d => !d.deliveryPersonId));
+    updateRiderLists();
   }, []);
 
-  // Mock function to assign rider
+  const updateRiderLists = () => {
+    setAvailableRiders(riders.filter(rider => rider.status === 'available'));
+    setBusyRiders(riders.filter(rider => rider.status === 'busy'));
+  };
+
+  // Get all riders
+  const getRiders = async () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        updateRiderLists();
+        resolve(riders);
+      }, 500);
+    });
+  };
+
+  // Add new rider
+  const addRider = async (riderData) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const newRider = {
+          id: (riders.length + 1).toString(),
+          ...riderData,
+          avatar: '/images/default-rider.png'
+        };
+        const updatedRiders = [...riders, newRider];
+        setRiders(updatedRiders);
+        updateRiderLists();
+        resolve(newRider);
+      }, 500);
+    });
+  };
+
+  // Assign rider to delivery
   const assignRider = async (orderId, riderId) => {
     return new Promise((resolve) => {
       setTimeout(() => {
-        // Update the mock data
-        const updatedDeliveries = mockDeliveries.map(order => 
-          order.id === orderId ? { ...order, deliveryPersonId: riderId, status: 'delivery' } : order
-        );
-        
-        setAssignedDeliveries(updatedDeliveries.filter(d => d.deliveryPersonId));
-        setUnassignedDeliveries(updatedDeliveries.filter(d => !d.deliveryPersonId));
-        
-        // Update rider status to busy
+        // Update the rider status to busy
         const updatedRiders = riders.map(rider => 
           rider.id === riderId ? { ...rider, status: 'busy' } : rider
         );
         setRiders(updatedRiders);
-        setAvailableRiders(updatedRiders.filter(r => r.status === 'available'));
-        
+        updateRiderLists();
         console.log(`Assigned rider ${riderId} to order ${orderId}`);
         resolve(true);
       }, 500);
     });
   };
 
-  // Mock function to update rider status
+  // Update rider status
   const updateRiderStatus = async (riderId, status) => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -103,7 +119,7 @@ export const DeliveryProvider = ({ children }) => {
           rider.id === riderId ? { ...rider, status } : rider
         );
         setRiders(updatedRiders);
-        setAvailableRiders(updatedRiders.filter(r => r.status === 'available'));
+        updateRiderLists();
         console.log(`Updated rider ${riderId} status to ${status}`);
         resolve(true);
       }, 500);
@@ -114,9 +130,12 @@ export const DeliveryProvider = ({ children }) => {
     <DeliveryContext.Provider value={{
       riders,
       availableRiders,
-      assignedDeliveries: assignedDeliveries,
-      unassignedDeliveries: unassignedDeliveries,
+      busyRiders,
+      assignedDeliveries,
+      unassignedDeliveries,
+      getRiders,
       assignRider,
+      addRider,
       updateRiderStatus
     }}>
       {children}
