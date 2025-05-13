@@ -22,7 +22,7 @@ export default function VendorManagement() {
     email: '',
     phone: '',
     address: '',
-    cuisineType: '',
+    serviceType: '', // Changed from cuisineType to serviceType
   });
   const [activeTab, setActiveTab] = useState('vendor');
 
@@ -30,9 +30,9 @@ export default function VendorManagement() {
     totalVendors: 0,
     activeVendors: 0,
     inactiveVendors: 0,
-    arabicCuisine: 0,
-    asianCuisine: 0,
-    internationalCuisine: 0,
+    premiumService: 0,
+    standardService: 0,
+    expressService: 0,
     topRatedVendors: 0
   });
 
@@ -54,41 +54,53 @@ export default function VendorManagement() {
     try {
       setLoading(true);
       
-      // In a real app, you would make an API call here
-      // For demo, we'll use the mock users from AuthContext
+      // Mock data for laundry service vendors
       const mockVendors = [
         {
           id: 'VEN-001',
-          name: 'international cleaning services',
-          email: 'vendor@example.com',
+          name: 'International Cleaning Services',
+          email: 'cleaning@example.com',
           phone: '+966 50 456 7890',
-          address: '456 Vendor St, Riyadh',
-          cuisineType: 'Arabic',
+          address: '456 Service St, Riyadh',
+          serviceType: 'Premium', // Changed from cuisineType
           isActive: true,
           rating: 4.5,
           ratingCount: 120,
-          logo: '/images/restaurant-logo.png'
+          logo: '/images/cleaning-logo.png',
+          services: ['Pillow Cleaning', 'Mattress Cleaning', 'Bedsheet Laundry']
         },
-        // Add more mock vendors as needed
+        {
+          id: 'VEN-002',
+          name: 'Quick Wash Laundry',
+          email: 'quickwash@example.com',
+          phone: '+966 50 123 4567',
+          address: '789 Laundry Ave, Jeddah',
+          serviceType: 'Express',
+          isActive: true,
+          rating: 4.2,
+          ratingCount: 85,
+          logo: '/images/laundry-logo.png',
+          services: ['Bedsheet Laundry', 'Blanket Cleaning']
+        }
       ];
 
       setVendors(mockVendors);
 
-      // Calculate stats
+      // Calculate stats with service types instead of cuisines
       const totalVendors = mockVendors.length;
       const activeVendors = mockVendors.filter(v => v.isActive !== false).length;
-      const arabicCuisine = mockVendors.filter(v => v.cuisineType === 'Arabic').length;
-      const asianCuisine = mockVendors.filter(v => v.cuisineType === 'Asian').length;
-      const internationalCuisine = mockVendors.filter(v => v.cuisineType === 'International').length;
+      const premiumService = mockVendors.filter(v => v.serviceType === 'Premium').length;
+      const standardService = mockVendors.filter(v => v.serviceType === 'Standard').length;
+      const expressService = mockVendors.filter(v => v.serviceType === 'Express').length;
       const topRatedVendors = mockVendors.filter(v => v.rating >= 4).length;
 
       setStats({
         totalVendors,
         activeVendors,
         inactiveVendors: totalVendors - activeVendors,
-        arabicCuisine,
-        asianCuisine,
-        internationalCuisine,
+        premiumService,
+        standardService,
+        expressService,
         topRatedVendors
       });
     } catch (error) {
@@ -124,15 +136,14 @@ export default function VendorManagement() {
 
   const createVendor = async () => {
     try {
-      // In a real app, you would make an API call here
-      // For demo, we'll just add to local state
       const newVendorWithId = {
         ...newVendor,
         id: `VEN-${Math.floor(1000 + Math.random() * 9000)}`,
         isActive: true,
         rating: 0,
         ratingCount: 0,
-        logo: '/images/default-restaurant.png'
+        logo: '/images/default-service.png',
+        services: []
       };
 
       setVendors(prev => [...prev, newVendorWithId]);
@@ -147,10 +158,9 @@ export default function VendorManagement() {
         email: '',
         phone: '',
         address: '',
-        cuisineType: '',
+        serviceType: '',
       });
       
-      // Refresh stats
       fetchVendors();
     } catch (error) {
       if (showNotification) {
@@ -162,8 +172,6 @@ export default function VendorManagement() {
 
   const updateVendorStatus = async (vendorId, isActive) => {
     try {
-      // In a real app, you would make an API call here
-      // For demo, we'll just update local state
       setVendors(prev => 
         prev.map(vendor => 
           vendor.id === vendorId ? { ...vendor, isActive } : vendor
@@ -174,7 +182,6 @@ export default function VendorManagement() {
         showNotification('success', t('admin.vendor_status_updated'));
       }
       
-      // Refresh stats
       fetchVendors();
     } catch (error) {
       if (showNotification) {
@@ -187,7 +194,7 @@ export default function VendorManagement() {
   const filteredVendors = vendors.filter(vendor => 
     vendor.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
     vendor.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (vendor.cuisineType && vendor.cuisineType.toLowerCase().includes(searchTerm.toLowerCase()))
+    (vendor.serviceType && vendor.serviceType.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const handleNavigation = (path) => {
@@ -232,7 +239,7 @@ export default function VendorManagement() {
             </p>
           </div>
           
-          {/* Stats Overview */}
+          {/* Stats Overview - Updated for laundry services */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div className="bg-white rounded-lg shadow-md p-4">
               <h3 className="text-sm font-medium text-gray-500 mb-2">
@@ -269,15 +276,15 @@ export default function VendorManagement() {
             </div>
             <div className="bg-white rounded-lg shadow-md p-4">
               <h3 className="text-sm font-medium text-gray-500 mb-2">
-                {language === 'en' ? 'Cuisine Types' : 'أنواع المطابخ'}
+                {language === 'en' ? 'Service Types' : 'أنواع الخدمات'}
               </h3>
               <div className="flex justify-between items-end">
                 <p className="text-2xl font-bold text-orange-600">
-                  {stats.arabicCuisine + stats.asianCuisine + stats.internationalCuisine}
+                  {stats.premiumService + stats.standardService + stats.expressService}
                 </p>
                 <div className="text-sm">
-                  <span className="text-orange-500">{stats.arabicCuisine} {language === 'en' ? 'Arabic' : 'عربي'}</span>,{' '}
-                  <span className="text-blue-500">{stats.asianCuisine} {language === 'en' ? 'Asian' : 'آسيوي'}</span>
+                  <span className="text-orange-500">{stats.premiumService} {language === 'en' ? 'Premium' : 'ممتاز'}</span>,{' '}
+                  <span className="text-blue-500">{stats.expressService} {language === 'en' ? 'Express' : 'سريع'}</span>
                 </div>
               </div>
             </div>
@@ -292,8 +299,8 @@ export default function VendorManagement() {
                 </h3>
                 <p className="mt-1 max-w-2xl text-sm text-gray-500">
                   {language === 'en' 
-                    ? 'Manage vendors and restaurants' 
-                    : 'إدارة البائعين والمطاعم'}
+                    ? 'Manage cleaning service vendors' 
+                    : 'إدارة بائعي خدمات التنظيف'}
                 </p>
               </div>
               <div className="flex space-x-2">
@@ -336,7 +343,7 @@ export default function VendorManagement() {
                         {language === 'en' ? 'Contact' : 'الاتصال'}
                       </th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        {language === 'en' ? 'Cuisine' : 'المطبخ'}
+                        {language === 'en' ? 'Service Type' : 'نوع الخدمة'}
                       </th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         {language === 'en' ? 'Rating' : 'التقييم'}
@@ -356,7 +363,7 @@ export default function VendorManagement() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
                               <div className="flex-shrink-0 h-10 w-10">
-                                <img className="h-10 w-10 rounded-full" src={vendor.logo || '/images/default-restaurant.png'} alt="" />
+                                <img className="h-10 w-10 rounded-full" src={vendor.logo || '/images/default-service.png'} alt="" />
                               </div>
                               <div className="ml-4">
                                 <div className="text-sm font-medium text-gray-900">{vendor.name}</div>
@@ -369,7 +376,7 @@ export default function VendorManagement() {
                             <div className="text-sm text-gray-500">{vendor.phone}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {vendor.cuisineType}
+                            {vendor.serviceType}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
@@ -477,7 +484,7 @@ export default function VendorManagement() {
         </div>
       </div>
 
-      {/* New Vendor Modal */}
+      {/* New Vendor Modal - Updated for laundry services */}
       {newVendorModal && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -552,26 +559,20 @@ export default function VendorManagement() {
                       </div>
                       
                       <div>
-                        <label htmlFor="cuisineType" className="block text-sm font-medium text-gray-700 text-left">
-                          {language === 'en' ? 'Cuisine Type' : 'نوع المطبخ'}
+                        <label htmlFor="serviceType" className="block text-sm font-medium text-gray-700 text-left">
+                          {language === 'en' ? 'Service Type' : 'نوع الخدمة'}
                         </label>
                         <select
-                          name="cuisineType"
-                          id="cuisineType"
-                          value={newVendor.cuisineType}
+                          name="serviceType"
+                          id="serviceType"
+                          value={newVendor.serviceType}
                           onChange={handleInputChange}
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         >
-                          <option value="">{language === 'en' ? 'Select Cuisine' : 'اختر نوع المطبخ'}</option>
-                          <option value="Arabic">{language === 'en' ? 'Arabic' : 'عربي'}</option>
-                          <option value="Asian">{language === 'en' ? 'Asian' : 'آسيوي'}</option>
-                          <option value="Bakery">{language === 'en' ? 'Bakery' : 'مخبوزات'}</option>
-                          <option value="Fast Food">{language === 'en' ? 'Fast Food' : 'وجبات سريعة'}</option>
-                          <option value="International">{language === 'en' ? 'International' : 'دولي'}</option>
-                          <option value="Italian">{language === 'en' ? 'Italian' : 'إيطالي'}</option>
-                          <option value="Mexican">{language === 'en' ? 'Mexican' : 'مكسيكي'}</option>
-                          <option value="Seafood">{language === 'en' ? 'Seafood' : 'مأكولات بحرية'}</option>
-                          <option value="Vegetarian">{language === 'en' ? 'Vegetarian' : 'نباتي'}</option>
+                          <option value="">{language === 'en' ? 'Select Service Type' : 'اختر نوع الخدمة'}</option>
+                          <option value="Premium">{language === 'en' ? 'Premium' : 'ممتاز'}</option>
+                          <option value="Standard">{language === 'en' ? 'Standard' : 'عادي'}</option>
+                          <option value="Express">{language === 'en' ? 'Express' : 'سريع'}</option>
                         </select>
                       </div>
                     </div>

@@ -4,6 +4,7 @@ import Layout from '../../components/Layout';
 import Sidebar from '../../components/Sidebar';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
+import Modal from '../../components/Modal';
 
 export default function UserManagement() {
   const [language, setLanguage] = useState('en');
@@ -27,6 +28,64 @@ export default function UserManagement() {
     riders: 0,
     admins: 0
   });
+
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [newUser, setNewUser] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    type: 'customer',
+    password: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewUser(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleAddUserSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitError(null);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // In a real app, you would call your API here
+      // const response = await addUser(newUser);
+      
+      // For demo purposes, we'll just log and show success
+      console.log('New user data:', newUser);
+      setSubmitSuccess(true);
+      
+      // Reset form after successful submission
+      setTimeout(() => {
+        setNewUser({
+          name: '',
+          email: '',
+          phone: '',
+          type: 'customer',
+          password: ''
+        });
+        setSubmitSuccess(false);
+        setIsAddUserModalOpen(false);
+        // You might want to refresh the user list here
+        // fetchUsers();
+      }, 2000);
+    } catch (error) {
+      setSubmitError(error.message || 'Failed to add user');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -207,7 +266,7 @@ export default function UserManagement() {
                   </div>
                 </div>
                 <button 
-                  onClick={() => handleNavigation('/admin/users/new')}
+                  onClick={() => setIsAddUserModalOpen(true)}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm"
                 >
                   {language === 'en' ? 'Add User' : 'إضافة مستخدم'}
@@ -315,7 +374,7 @@ export default function UserManagement() {
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <button 
-                onClick={() => handleNavigation('/admin/users/new')}
+                onClick={() => setIsAddUserModalOpen(true)}
                 className="bg-blue-50 hover:bg-blue-100 text-blue-800 p-4 rounded-lg transition duration-300 flex flex-col items-center"
               >
                 <span className="text-2xl mb-2">➕</span>
@@ -354,6 +413,145 @@ export default function UserManagement() {
           </div>
         </div>
       </div>
+      {/* Add User Modal */}
+<Modal isOpen={isAddUserModalOpen} onClose={() => setIsAddUserModalOpen(false)}>
+  <div className="bg-white rounded-lg p-6 max-w-md w-full">
+    <h2 className="text-xl font-bold text-blue-800 mb-4">
+      {language === 'en' ? 'Add New User' : 'إضافة مستخدم جديد'}
+    </h2>
+    
+    {submitSuccess ? (
+      <div className="text-center py-4">
+        <div className="text-green-500 text-5xl mb-4">✓</div>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">
+          {language === 'en' ? 'User Added Successfully!' : 'تمت إضافة المستخدم بنجاح!'}
+        </h3>
+        <p className="text-sm text-gray-500">
+          {language === 'en' 
+            ? 'The new user has been added to the system.' 
+            : 'تمت إضافة المستخدم الجديد إلى النظام.'}
+        </p>
+      </div>
+    ) : (
+      <form onSubmit={handleAddUserSubmit}>
+        <div className="space-y-4">
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              {language === 'en' ? 'Full Name' : 'الاسم الكامل'}
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={newUser.name}
+              onChange={handleInputChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              required
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={newUser.email}
+              onChange={handleInputChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              required
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+              {language === 'en' ? 'Phone Number' : 'رقم الهاتف'}
+            </label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              value={newUser.phone}
+              onChange={handleInputChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="type" className="block text-sm font-medium text-gray-700">
+              {language === 'en' ? 'User Type' : 'نوع المستخدم'}
+            </label>
+            <select
+              id="type"
+              name="type"
+              value={newUser.type}
+              onChange={handleInputChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="customer">
+                {language === 'en' ? 'Customer' : 'عميل'}
+              </option>
+              <option value="vendor">
+                {language === 'en' ? 'Vendor' : 'بائع'}
+              </option>
+              <option value="delivery">
+                {language === 'en' ? 'Rider' : 'راكب'}
+              </option>
+              <option value="admin">
+                {language === 'en' ? 'Admin' : 'مسؤول'}
+              </option>
+            </select>
+          </div>
+          
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              {language === 'en' ? 'Password' : 'كلمة المرور'}
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={newUser.password}
+              onChange={handleInputChange}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              required
+              minLength="6"
+            />
+          </div>
+        </div>
+        
+        {submitError && (
+          <div className="mt-4 text-red-500 text-sm">
+            {submitError}
+          </div>
+        )}
+        
+        <div className="mt-6 flex justify-end space-x-3">
+          <button
+            type="button"
+            onClick={() => setIsAddUserModalOpen(false)}
+            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            {language === 'en' ? 'Cancel' : 'إلغاء'}
+          </button>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? (
+              language === 'en' ? 'Adding...' : 'جاري الإضافة...'
+            ) : (
+              language === 'en' ? 'Add User' : 'إضافة مستخدم'
+            )}
+          </button>
+        </div>
+      </form>
+    )}
+  </div>
+</Modal>
     </Layout>
   );
 }
