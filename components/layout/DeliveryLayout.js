@@ -164,7 +164,7 @@ export default function DeliveryLayout({ children, title }) {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-primary-600">
-                {language === 'en' ? 'NASI CLEANING' : 'تنظيف ناسي'}
+                {language === 'en' ? 'Nasi` Cleanings' : 'تنظيف ناسي'}
                 </h1>
                 <p className="text-sm text-gray-500">
                   {language === 'en' ? 'Delivery App' : 'تطبيق التوصيل'}
@@ -242,7 +242,7 @@ export default function DeliveryLayout({ children, title }) {
                       </svg>
                     </div>
                     <h1 className="text-lg font-bold text-primary-600">
-                      {language === 'en' ? 'NASI CLEANING' : 'تنظيف ناسي'}
+                      {language === 'en' ? 'Nasi` Cleanings' : 'تنظيف ناسي'}
                     </h1>
                   </div>
                   

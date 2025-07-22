@@ -79,7 +79,7 @@ export default function BookServicePage() {
   };
 
   return (
-    <Layout title={language === 'en' ? 'Book Service | NASI CLEANING' : 'حجز الخدمة | تنظيف الأرز'}>
+    <Layout title={language === 'en' ? 'Book Service | Nasi` Cleanings' : 'حجز الخدمة | تنظيف الأرز'}>
       <div className="bg-gray-50 min-h-screen py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
