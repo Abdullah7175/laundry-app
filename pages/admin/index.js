@@ -43,16 +43,20 @@ export default function AdminDashboard() {
   }, [isAuthenticated, user]);
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
+    if (loading) return;
+
+    if (!isAuthenticated) {
       router.push('/login');
+      return;
     }
 
-    if (isAuthenticated && user && user.type !== 'admin') {
+    if (user && user.type !== 'admin') {
       // Redirect to the appropriate dashboard based on user type
-      router.push(`/${user.type}`);
+      router.push('/');
+      return;
     }
 
-    if (isAuthenticated && user && user.type === 'admin') {
+    if (user && user.type === 'admin') {
       getAllOrders().then((fetchedOrders) => {
         // Calculate statistics
         const today = new Date();
@@ -585,6 +589,87 @@ export default function AdminDashboard() {
               </button>
             </div>
           </div>
+          
+          {/* Settings Tab */}
+          {activeTab === 'settings' && (
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-2xl font-bold text-blue-800 mb-6">
+                {language === 'en' ? 'Admin Settings' : 'إعدادات المسؤول'}
+              </h2>
+              <div className="max-w-2xl">
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-gray-700 font-medium mb-2">
+                      {language === 'en' ? 'Platform Name' : 'اسم المنصة'}
+                    </label>
+                    <input 
+                      type="text" 
+                      className="w-full border border-gray-300 rounded-md p-3" 
+                      value="Nasi` Cleanings" 
+                      readOnly 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-700 font-medium mb-2">
+                      {language === 'en' ? 'Support Email' : 'بريد الدعم'}
+                    </label>
+                    <input 
+                      type="email" 
+                      className="w-full border border-gray-300 rounded-md p-3" 
+                      value="support@nasicleanings.com" 
+                      readOnly 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-700 font-medium mb-2">
+                      {language === 'en' ? 'Default Language' : 'اللغة الافتراضية'}
+                    </label>
+                    <select 
+                      className="w-full border border-gray-300 rounded-md p-3" 
+                      value="en" 
+                      readOnly
+                    >
+                      <option value="en">English</option>
+                      <option value="ar">Arabic</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-gray-700 font-medium mb-2">
+                      {language === 'en' ? 'System Status' : 'حالة النظام'}
+                    </label>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                      <span className="text-green-700 font-medium">
+                        {language === 'en' ? 'Online' : 'متصل'}
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-gray-700 font-medium mb-2">
+                      {language === 'en' ? 'Maintenance Mode' : 'وضع الصيانة'}
+                    </label>
+                    <div className="flex items-center">
+                      <input 
+                        type="checkbox" 
+                        className="mr-2" 
+                        disabled 
+                      />
+                      <span className="text-gray-500">
+                        {language === 'en' ? 'Disabled' : 'معطل'}
+                      </span>
+                    </div>
+                  </div>
+                  <button 
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition duration-300 w-full" 
+                    disabled
+                  >
+                    {language === 'en' ? 'Save Changes' : 'حفظ التغييرات'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          
           <DeliveryManagementSection />
         </div>
       </div>

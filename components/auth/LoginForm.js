@@ -65,15 +65,15 @@ const LoginForm = ({ demoCredentials }) => {
         // Redirect based on user role
         const user = success;
         if (user.role === 'admin') {
-          router.push('/admin/dashboard');
+          router.push('/admin');
         } else if (user.role === 'vendor') {
-          router.push('/vendor/dashboard');
+          router.push('/vendor');
         } else if (user.role === 'delivery') {
-          router.push('/delivery/dashboard');
+          router.push('/delivery');
         } else if (user.role === 'laundry') {
-          router.push('/laundry/dashboard');
+          router.push('/laundry');
         } else {
-          router.push('/customer/dashboard');
+          router.push('/dashboard');
         }
       } else {
         addNotification({
@@ -130,10 +130,8 @@ const LoginForm = ({ demoCredentials }) => {
         />
         
         <div className="text-sm text-right">
-          <Link href="/auth/forgot-password">
-            <a className="font-medium text-blue-600 hover:text-blue-500">
-              {t('auth.forgot_password')}
-            </a>
+          <Link href="/auth/forgot-password" className="font-medium text-blue-600 hover:text-blue-500">
+            {t('auth.forgot_password')}
           </Link>
         </div>
         
@@ -150,10 +148,8 @@ const LoginForm = ({ demoCredentials }) => {
       <div className="text-center">
         <p className="text-sm text-gray-600">
           {t('auth.no_account')}{' '}
-          <Link href="/auth/register">
-            <a className="font-medium text-blue-600 hover:text-blue-500">
-              {t('auth.register')}
-            </a>
+          <Link href="/auth/register" className="font-medium text-blue-600 hover:text-blue-500">
+            {t('auth.register')}
           </Link>
         </p>
       </div>

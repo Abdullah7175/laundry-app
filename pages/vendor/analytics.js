@@ -1,22 +1,105 @@
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
+import Sidebar from '../../components/Sidebar';
+import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
+
+const analytics = {
+  totalOrders: 120,
+  totalRevenue: 3500,
+  completionRate: 92,
+};
 
 export default function VendorAnalytics() {
-  return (
-    <Layout title="Vendor Analytics | Nasi` Cleanings">
-      <section className="bg-blue-800 text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold mb-4">Analytics</h1>
-          <p className="text-xl mb-8">View your business analytics and performance here.</p>
+  const [language, setLanguage] = useState('en');
+  const [activeTab, setActiveTab] = useState('analytics');
+  const router = useRouter();
+  const { user, isAuthenticated, loading } = useAuth();
+  const { t } = useLanguage();
+
+  // Vendor navigation items
+  const navItems = [
+    { id: 'dashboard', label: language === 'en' ? 'Dashboard' : 'لوحة القيادة', icon: '📊' },
+    { id: 'orders', label: language === 'en' ? 'Orders' : 'الطلبات', icon: '📦' },
+    { id: 'pricing', label: language === 'en' ? 'Pricing' : 'التسعير', icon: '💰' },
+    { id: 'analytics', label: language === 'en' ? 'Analytics' : 'التحليلات', icon: '📈' },
+    { id: 'settings', label: language === 'en' ? 'Settings' : 'الإعدادات', icon: '⚙️' }
+  ];
+
+  useEffect(() => {
+    if (loading) return;
+
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    if (user && user.type !== 'vendor') {
+      router.push('/');
+      return;
+    }
+  }, [loading, isAuthenticated, user, router]);
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="flex justify-center items-center h-screen">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600"></div>
         </div>
-      </section>
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4 max-w-2xl">
-          <div className="bg-white p-8 rounded-lg shadow-md space-y-6 text-center">
-            <h2 className="text-2xl font-bold text-blue-800 mb-4">Analytics Demo</h2>
-            <p className="text-gray-700">This is a demo page for vendor analytics. Integrate your analytics dashboard here.</p>
+      </Layout>
+    );
+  }
+
+  return (
+    <Layout>
+      <div className="flex flex-col md:flex-row min-h-screen bg-blue-50">
+        <Sidebar 
+          navItems={navItems} 
+          activeItem={activeTab} 
+          setActiveItem={(item) => {
+            setActiveTab(item);
+            if (item === 'dashboard') {
+              router.push('/vendor');
+            } else {
+              router.push(`/vendor/${item}`);
+            }
+          }} 
+          language={language}
+          userType="vendor"
+        />
+        
+        <div className="flex-1 p-4 md:p-8">
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-blue-800">
+              {language === 'en' ? 'Analytics' : 'التحليلات'}
+            </h1>
+            <p className="text-gray-600">
+              {language === 'en' ? 'View your business analytics and performance here.' : 'عرض تحليلات أعمالك وأدائك هنا.'}
+            </p>
+          </div>
+          
+          <div className="bg-white p-8 rounded-lg shadow-md">
+            <h2 className="text-2xl font-bold text-blue-800 mb-4">
+              {language === 'en' ? 'Overview' : 'نظرة عامة'}
+            </h2>
+            <ul className="space-y-4">
+              <li className="flex justify-between text-lg">
+                <span>{language === 'en' ? 'Total Orders:' : 'إجمالي الطلبات:'}</span>
+                <span className="font-bold text-blue-700">{analytics.totalOrders}</span>
+              </li>
+              <li className="flex justify-between text-lg">
+                <span>{language === 'en' ? 'Total Revenue (SAR):' : 'إجمالي الإيرادات (ريال):'}</span>
+                <span className="font-bold text-green-700">{analytics.totalRevenue}</span>
+              </li>
+              <li className="flex justify-between text-lg">
+                <span>{language === 'en' ? 'Completion Rate:' : 'معدل الإنجاز:'}</span>
+                <span className="font-bold text-purple-700">{analytics.completionRate}%</span>
+              </li>
+            </ul>
           </div>
         </div>
-      </section>
+      </div>
     </Layout>
   );
 } 

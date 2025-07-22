@@ -106,7 +106,9 @@
     "dashboard": "Vendor Dashboard",
     "orders": "Manage Orders",
     "services": "Services",
-    "analytics": "Analytics"
+    "analytics": "Analytics",
+    "pricing": "Pricing",
+    "settings": "Settings"
   },
   "delivery": {
     "dashboard": "Delivery Dashboard",

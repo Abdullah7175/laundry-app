@@ -87,7 +87,7 @@ const RegisterForm = () => {
           type: 'success',
           message: t('auth.register_success'),
         });
-        router.push('/customer/dashboard');
+        router.push('/dashboard');
       } else {
         addNotification({
           type: 'error',
@@ -196,10 +196,8 @@ const RegisterForm = () => {
       <div className="text-center">
         <p className="text-sm text-gray-600">
           {t('auth.has_account')}{' '}
-          <Link href="/auth/login">
-            <a className="font-medium text-blue-600 hover:text-blue-500">
-              {t('auth.login')}
-            </a>
+          <Link href="/auth/login" className="font-medium text-blue-600 hover:text-blue-500">
+            {t('auth.login')}
           </Link>
         </p>
       </div>

@@ -65,9 +65,9 @@ export default function Home() {
               }
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-8">
-              <Link href="/services"><a className="bg-white text-blue-800 hover:bg-blue-100 px-4 py-2 rounded-full font-bold shadow transition">Services</a></Link>
-              <Link href="/about"><a className="bg-white text-blue-800 hover:bg-blue-100 px-4 py-2 rounded-full font-bold shadow transition">About</a></Link>
-              <Link href="/contact"><a className="bg-white text-blue-800 hover:bg-blue-100 px-4 py-2 rounded-full font-bold shadow transition">Contact</a></Link>
+              <Link href="/services" className="bg-white text-blue-800 hover:bg-blue-100 px-4 py-2 rounded-full font-bold shadow transition">Services</Link>
+              <Link href="/about" className="bg-white text-blue-800 hover:bg-blue-100 px-4 py-2 rounded-full font-bold shadow transition">About</Link>
+              <Link href="/contact" className="bg-white text-blue-800 hover:bg-blue-100 px-4 py-2 rounded-full font-bold shadow transition">Contact</Link>
             </div>
             <button
               onClick={() => isAuthenticated ? router.push('/dashboard') : router.push('/register')}

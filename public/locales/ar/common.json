@@ -106,7 +106,9 @@
     "dashboard": "لوحة تحكم المورد",
     "orders": "إدارة الطلبات",
     "services": "الخدمات",
-    "analytics": "التحليلات"
+    "analytics": "التحليلات",
+    "pricing": "التسعير",
+    "settings": "الإعدادات"
   },
   "delivery": {
     "dashboard": "لوحة تحكم التوصيل",

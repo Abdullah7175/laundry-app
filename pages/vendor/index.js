@@ -4,16 +4,15 @@ import Layout from '../../components/Layout';
 import Sidebar from '../../components/Sidebar';
 import { useAuth } from '../../context/AuthContext';
 import { useOrder } from '../../context/OrderContext';
-import VendorDeliveryManagement from '../../components/vendor/VendorDeliveryManagement';
 
 export default function VendorDashboard() {
   const [language, setLanguage] = useState('en');
   const [activeTab, setActiveTab] = useState('dashboard');
   const router = useRouter();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, loading } = useAuth();
   const { getVendorOrders } = useOrder();
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingOrders, setLoadingOrders] = useState(true);
   const [stats, setStats] = useState({
     totalOrders: 0,
     pendingOrders: 0,
@@ -31,10 +30,10 @@ export default function VendorDashboard() {
       const fetchedOrders = await getVendorOrders(user.id);
       setOrders(fetchedOrders);
       calculateStats(fetchedOrders);
-      setLoading(false);
+      setLoadingOrders(false);
     } catch (error) {
       console.error('Error fetching orders:', error);
-      setLoading(false);
+      setLoadingOrders(false);
     }
   };
 
@@ -82,20 +81,24 @@ export default function VendorDashboard() {
   };
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
+    if (loading) return;
+
+    if (!isAuthenticated) {
       router.push('/login');
+      return;
     }
 
-    if (isAuthenticated && user && user.type !== 'vendor') {
-      router.push(`/${user.type}`);
+    if (user && user.type !== 'vendor') {
+      router.push('/');
+      return;
     }
 
-    if (isAuthenticated && user && user.type === 'vendor') {
+    if (user && user.type === 'vendor') {
       fetchOrders();
     }
   }, [loading, isAuthenticated, user, router]);
 
-  if (loading) {
+  if (loading || loadingOrders) {
     return (
       <Layout>
         <div className="flex justify-center items-center h-screen">
@@ -119,11 +122,6 @@ export default function VendorDashboard() {
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 5);
 
-  // Get orders ready for delivery management
-  const deliveryOrders = orders.filter(order => 
-    ['readyForDelivery', 'delivery'].includes(order.status)
-  );
-  
   return (
     <Layout>
       <div className="flex flex-col md:flex-row min-h-screen bg-blue-50">
@@ -132,7 +130,9 @@ export default function VendorDashboard() {
           activeItem={activeTab} 
           setActiveItem={(item) => {
             setActiveTab(item);
-            if (item !== 'dashboard') {
+            if (item === 'dashboard') {
+              router.push('/vendor');
+            } else {
               router.push(`/vendor/${item}`);
             }
           }} 
@@ -199,7 +199,7 @@ export default function VendorDashboard() {
               </div>
             </div>
           </div>
-          
+
           {/* Revenue Overview */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
             <div className="bg-white rounded-lg shadow-md p-4 lg:col-span-2">
@@ -251,7 +251,7 @@ export default function VendorDashboard() {
               </div>
             </div>
           </div>
-          
+
           {/* Recent Orders */}
           <div className="bg-white rounded-lg shadow-md p-4 mb-8">
             <div className="flex justify-between items-center mb-4">
@@ -309,88 +309,6 @@ export default function VendorDashboard() {
               </table>
             </div>
           </div>
-          
-          {/* Orders by Status */}
-          <div className="bg-white rounded-lg shadow-md p-4">
-            <h2 className="text-lg font-bold text-blue-800 mb-4">
-              {language === 'en' ? 'Orders by Status' : 'الطلبات حسب الحالة'}
-            </h2>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="text-sm font-medium text-gray-600 mb-1">
-                  {language === 'en' ? 'Pending' : 'قيد الانتظار'}
-                </h3>
-                <p className="text-2xl font-bold text-yellow-600">
-                  {orders.filter(order => order.status === 'pending').length}
-                </p>
-              </div>
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="text-sm font-medium text-gray-600 mb-1">
-                  {language === 'en' ? 'Processing' : 'قيد المعالجة'}
-                </h3>
-                <p className="text-2xl font-bold text-blue-600">
-                  {orders.filter(order => order.status === 'processing').length}
-                </p>
-              </div>
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="text-sm font-medium text-gray-600 mb-1">
-                  {language === 'en' ? 'Ready for Delivery' : 'جاهز للتسليم'}
-                </h3>
-                <p className="text-2xl font-bold text-teal-600">
-                  {orders.filter(order => order.status === 'readyForDelivery').length}
-                </p>
-              </div>
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="text-sm font-medium text-gray-600 mb-1">
-                  {language === 'en' ? 'Completed' : 'مكتمل'}
-                </h3>
-                <p className="text-2xl font-bold text-green-600">
-                  {orders.filter(order => order.status === 'delivered').length}
-                </p>
-              </div>
-            </div>
-            
-            <div className="mt-4">
-              <h3 className="text-sm font-medium text-gray-600 mb-3">
-                {language === 'en' ? 'Orders by Status' : 'الطلبات حسب الحالة'}
-              </h3>
-              <div className="h-8 bg-gray-200 rounded-full overflow-hidden">
-                <div className="flex h-full">
-                  <div 
-                    className="bg-yellow-500 h-full" 
-                    style={{ width: `${orders.filter(order => order.status === 'pending').length / stats.totalOrders * 100}%` }}
-                    title={language === 'en' ? 'Pending' : 'قيد الانتظار'}
-                  ></div>
-                  <div 
-                    className="bg-blue-500 h-full" 
-                    style={{ width: `${orders.filter(order => order.status === 'processing').length / stats.totalOrders * 100}%` }}
-                    title={language === 'en' ? 'Processing' : 'قيد المعالجة'}
-                  ></div>
-                  <div 
-                    className="bg-teal-500 h-full" 
-                    style={{ width: `${orders.filter(order => order.status === 'readyForDelivery').length / stats.totalOrders * 100}%` }}
-                    title={language === 'en' ? 'Ready for Delivery' : 'جاهز للتسليم'}
-                  ></div>
-                  <div 
-                    className="bg-green-500 h-full" 
-                    style={{ width: `${orders.filter(order => order.status === 'delivered').length / stats.totalOrders * 100}%` }}
-                    title={language === 'en' ? 'Delivered' : 'تم التسليم'}
-                  ></div>
-                  <div 
-                    className="bg-red-500 h-full" 
-                    style={{ width: `${orders.filter(order => order.status === 'cancelled').length / stats.totalOrders * 100}%` }}
-                    title={language === 'en' ? 'Cancelled' : 'ملغى'}
-                  ></div>
-                </div>
-              </div>
-            </div>
-          </div>
-           {/* Vendor Delivery Management */}
-           <VendorDeliveryManagement 
-            language={language} 
-            orders={orders.filter(order => ['readyForDelivery', 'delivery'].includes(order.status))}
-          />
         </div>
       </div>
     </Layout>
