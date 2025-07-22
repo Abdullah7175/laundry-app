@@ -89,8 +89,8 @@ export default function DeliveryLayout({ children, title }) {
   return (
     <div className={`min-h-screen flex flex-col ${language === 'ar' ? 'rtl' : 'ltr'}`}>
       <Head>
-        <title>{title ? `${title} | NASI CLEANING` : 'NASI CLEANING Delivery App'}</title>
-        <meta name="description" content="NASI CLEANING SERVICES - Delivery App" />
+        <title>{title ? `${title} | CLEANING` : 'Nasi` Cleanings Delivery App'}</title>
+        <meta name="description" content="Nasi` Cleanings - Delivery App" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
