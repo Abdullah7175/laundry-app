@@ -5,7 +5,6 @@ import Sidebar from '../../components/Sidebar';
 import { useAuth } from '../../context/AuthContext';
 import { useOrder } from '../../context/OrderContext';
 import { useDelivery } from '../../context/DeliveryContext';
-import AdminSettings from './settings';
 
 export default function AdminDashboard() {
   const [language, setLanguage] = useState('en');
@@ -272,7 +271,12 @@ export default function AdminDashboard() {
         <Sidebar 
           navItems={navItems} 
           activeItem={activeTab} 
-          setActiveItem={setActiveTab}
+          setActiveItem={(item) => {
+            setActiveTab(item);
+            if (item !== 'dashboard') {
+              router.push(`/admin/${item}`);
+            }
+          }} 
           language={language}
           userType="admin"
         />

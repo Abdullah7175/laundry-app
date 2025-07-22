@@ -8,7 +8,6 @@ import VendorCard, { dummyVendors } from '../../components/VendorCard';
 import { useAuth } from '../../context/AuthContext';
 import { useOrder } from '../../context/OrderContext';
 import LaundryServiceCart from '../../components/LaundryServiceCart';
-import Help from './help';
 
 export default function CustomerDashboard() {
   const router = useRouter();
@@ -84,12 +83,11 @@ export default function CustomerDashboard() {
   // Navigation items - add vendors tab
   const navItems = [
     { id: 'dashboard', label: language === 'en' ? 'Dashboard' : 'لوحة التحكم', icon: '📊' },
-    { id: 'book', label: language === 'en' ? 'Book Service' : 'حجز الخدمة', icon: '📝' },
-    { id: 'laundry', label: language === 'en' ? 'Laundry Service' : 'خدمة الغسيل', icon: '🧺' },
-    { id: 'vendors', label: language === 'en' ? 'Our Vendors' : 'البائعون لدينا', icon: '🏢' },
+    { id: 'laundry', label: language === 'en' ? 'Laundry Service' : 'خدمة الغسيل', icon: '🧺' }, 
+    // { id: 'book', label: language === 'en' ? 'Book Service' : 'حجز الخدمة', icon: '📝' },
+    { id: 'vendors', label: language === 'en' ? 'Our Vendors' : 'البائعون لدينا', icon: '🏢' }, // New tab
     { id: 'orders', label: language === 'en' ? 'My Orders' : 'طلباتي', icon: '📦' },
-    { id: 'profile', label: language === 'en' ? 'Profile' : 'الملف الشخصي', icon: '👤' },
-    { id: 'help', label: language === 'en' ? 'Help' : 'مساعدة', icon: '❓' }
+    { id: 'profile', label: language === 'en' ? 'Profile' : 'الملف الشخصي', icon: '👤' }
   ];
   
   if (loading || !user) {
@@ -132,6 +130,7 @@ export default function CustomerDashboard() {
             
             {/* Main content */}
             <div className="flex-grow">
+              {/* Dashboard tab */}
               {activeTab === 'dashboard' && (
                 <div className="space-y-6">
                   {/* Stats cards */}
@@ -283,7 +282,7 @@ export default function CustomerDashboard() {
                       </button>
                       
                       <button
-                        onClick={() => setActiveTab('help')}
+                        onClick={() => router.push('/dashboard/help')}
                         className="flex flex-col items-center justify-center p-4 bg-primary-50 text-primary-700 rounded-lg hover:bg-primary-100 transition-colors"
                       >
                         <svg className="w-6 h-6 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -298,6 +297,7 @@ export default function CustomerDashboard() {
                 </div>
               )}
               
+              {/* Book service tab */}
               {activeTab === 'book' && (
                 <div>
                   <h2 className="text-2xl font-bold text-gray-800 mb-6">
@@ -306,8 +306,6 @@ export default function CustomerDashboard() {
                   <BookingForm language={language} />
                 </div>
               )}
-
-              {activeTab === 'help' && <Help />}
 
               {/* Vendors tab */}
               {activeTab === 'vendors' && (
