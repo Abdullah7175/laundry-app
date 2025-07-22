@@ -282,6 +282,7 @@ export default function CustomerDashboard() {
                       </button>
                       
                       <button
+                        onClick={() => router.push('/dashboard/help')}
                         className="flex flex-col items-center justify-center p-4 bg-primary-50 text-primary-700 rounded-lg hover:bg-primary-100 transition-colors"
                       >
                         <svg className="w-6 h-6 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
